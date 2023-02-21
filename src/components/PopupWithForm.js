@@ -1,11 +1,17 @@
+import { useEffect } from "react";
+
 function PopupWithForm(props) {
   return (
     <div
       className={`popup popup_${props.name} ${
         props.isOpen ? "popup_opened" : ""
       }`}
+      onClick={props.onClose}
     >
-      <div className="popup__container">
+      <div
+        className="popup__container"
+        onClick={(event) => event.stopPropagation()}
+      >
         <button
           className="popup__close-button"
           type="button"

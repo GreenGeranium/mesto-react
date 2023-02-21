@@ -3,25 +3,48 @@ import Main from "./Main.js";
 import Footer from "./Footer.js";
 import PopupWithForm from "./PopupWithForm.js";
 import ImagePopup from "./ImagePopup.js";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function App() {
   let [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   let [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   let [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
 
+  //закрытие по клавише Esc
+  useEffect(() => {
+    if (
+      isEditProfilePopupOpen ||
+      isAddPlacePopupOpen ||
+      isEditAvatarPopupOpen
+    ) {
+      function handleEscEscape(event) {
+        if (event.key === "Escape") {
+          closeAllPopups();
+        }
+      }
+      document.addEventListener("keydown", handleEscEscape);
+      return () => {
+        document.removeEventListener("keydown", handleEscEscape);
+      };
+    }
+  }, [isEditProfilePopupOpen, isAddPlacePopupOpen, isEditAvatarPopupOpen]);
+
+  //открытие попапа с изменением аватарки
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
   }
 
+  //открытие попапа с изменением профиля
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
   }
 
+  //открытие попапа с добавлением места
   function handleAddPlaceClick() {
     setIsAddPlacePopupOpen(true);
   }
 
+  //закрытие всех попапов
   function closeAllPopups() {
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
