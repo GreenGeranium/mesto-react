@@ -22,6 +22,12 @@ function App() {
     setIsAddPlacePopupOpen(true);
   }
 
+  function closeAllPopups() {
+    setIsAddPlacePopupOpen(false);
+    setIsEditAvatarPopupOpen(false);
+    setIsEditProfilePopupOpen(false);
+  }
+
   return (
     <div className="page">
       <Header></Header>
@@ -38,6 +44,7 @@ function App() {
         idOfForm={"profile-edit"}
         buttonText={"Сохранить"}
         isOpen={isEditProfilePopupOpen}
+        onClose={closeAllPopups}
       >
         <label className="form__field">
           <input
@@ -75,6 +82,7 @@ function App() {
         idOfForm={"profile-add"}
         buttonText={"Сохранить"}
         isOpen={isAddPlacePopupOpen}
+        onClose={closeAllPopups}
       >
         <label className="form__field">
           <input
@@ -110,6 +118,7 @@ function App() {
         idOfForm={"popup_avatar"}
         buttonText={"Сохранить"}
         isOpen={isEditAvatarPopupOpen}
+        onClose={closeAllPopups}
       >
         <label className="form__field">
           <input
