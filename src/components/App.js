@@ -10,25 +10,6 @@ function App() {
   let [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   let [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
 
-  //закрытие по клавише Esc
-  useEffect(() => {
-    if (
-      isEditProfilePopupOpen ||
-      isAddPlacePopupOpen ||
-      isEditAvatarPopupOpen
-    ) {
-      function handleEscEscape(event) {
-        if (event.key === "Escape") {
-          closeAllPopups();
-        }
-      }
-      document.addEventListener("keydown", handleEscEscape);
-      return () => {
-        document.removeEventListener("keydown", handleEscEscape);
-      };
-    }
-  }, [isEditProfilePopupOpen, isAddPlacePopupOpen, isEditAvatarPopupOpen]);
-
   //открытие попапа с изменением аватарки
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);

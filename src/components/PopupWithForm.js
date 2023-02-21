@@ -1,6 +1,21 @@
 import { useEffect } from "react";
 
 function PopupWithForm(props) {
+  //закрытие по клавише Esc
+  function handleEscEscape(event) {
+    if (event.key === "Escape") {
+      props.onClose();
+    }
+  }
+  useEffect(() => {
+    if (props.isOpen) {
+      document.addEventListener("keydown", handleEscEscape);
+      return () => {
+        document.removeEventListener("keydown", handleEscEscape);
+      };
+    }
+  }, [props.isOpen]);
+
   return (
     <div
       className={`popup popup_${props.name} ${
