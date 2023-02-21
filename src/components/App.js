@@ -3,12 +3,33 @@ import Main from "./Main.js";
 import Footer from "./Footer.js";
 import PopupWithForm from "./PopupWithForm.js";
 import ImagePopup from "./ImagePopup.js";
+import { useState } from "react";
 
 function App() {
+  let [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
+  let [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+  let [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+
+  function handleEditAvatarClick() {
+    setIsEditAvatarPopupOpen(true);
+  }
+
+  function handleEditProfileClick() {
+    setIsEditProfilePopupOpen(true);
+  }
+
+  function handleAddPlaceClick() {
+    setIsAddPlacePopupOpen(true);
+  }
+
   return (
     <div className="page">
       <Header></Header>
-      <Main></Main>
+      <Main
+        onEditProfile={handleEditProfileClick}
+        onAddPlace={handleAddPlaceClick}
+        onEditAvatar={handleEditAvatarClick}
+      ></Main>
       <Footer></Footer>
       <PopupWithForm
         title={"Редактировать профиль"}
@@ -16,6 +37,7 @@ function App() {
         nameOfForm={"profile-edit"}
         idOfForm={"profile-edit"}
         buttonText={"Сохранить"}
+        isOpen={isEditProfilePopupOpen}
       >
         <label className="form__field">
           <input
@@ -52,6 +74,7 @@ function App() {
         nameOfForm={"card-add"}
         idOfForm={"profile-add"}
         buttonText={"Сохранить"}
+        isOpen={isAddPlacePopupOpen}
       >
         <label className="form__field">
           <input
@@ -86,6 +109,7 @@ function App() {
         nameOfForm={"avatar-change"}
         idOfForm={"popup_avatar"}
         buttonText={"Сохранить"}
+        isOpen={isEditAvatarPopupOpen}
       >
         <label className="form__field">
           <input
@@ -101,19 +125,6 @@ function App() {
         </label>
       </PopupWithForm>
       <ImagePopup></ImagePopup>
-      <div className="popup popup_image">
-        <div className="popup__container popup__container_type_image">
-          <button
-            className="popup__close-button"
-            type="button"
-            aria-label="Закрыть попап"
-          ></button>
-          <figure className="popup__figure">
-            <img src="src/components/App#" className="popup__image" />
-            <figcaption className="popup__subline"></figcaption>
-          </figure>
-        </div>
-      </div>
       <PopupWithForm
         title={" Вы уверены?"}
         buttonText={"Да"}

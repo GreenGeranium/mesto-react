@@ -1,23 +1,8 @@
-function Main() {
-  function handleEditAvatarClick() {
-    document.querySelector(".popup_avatar").classList.add("popup_opened");
-  }
-
-  function handleEditProfileClick() {
-    document.querySelector(".popup_edit").classList.add("popup_opened");
-  }
-
-  function handleAddPlaceClick() {
-    document.querySelector(".popup_add").classList.add("popup_opened");
-  }
-
+function Main(props) {
   return (
     <main className="content">
       <section className="profile">
-        <div
-          className="profile__avatar-container"
-          onClick={handleEditAvatarClick}
-        >
+        <div className="profile__avatar-container" onClick={props.onEditAvatar}>
           <img
             src="src/components/App#"
             alt="Аватарка Жак-Ив Кусто"
@@ -30,7 +15,7 @@ function Main() {
             className="profile__edit-button"
             type="button"
             aria-label="Редактировать профиль"
-            onClick={handleEditProfileClick}
+            onClick={props.onEditProfile}
           ></button>
           <p className="profile__subline"></p>
         </div>
@@ -38,7 +23,7 @@ function Main() {
           className="profile__add-button"
           type="button"
           aria-label="Добавить фотографию"
-          onClick={handleAddPlaceClick}
+          onClick={props.onAddPlace}
         ></button>
       </section>
       <section className="elements" aria-label="Фотокарточки городов">
