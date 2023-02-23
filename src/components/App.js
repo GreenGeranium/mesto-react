@@ -3,7 +3,7 @@ import Main from "./Main.js";
 import Footer from "./Footer.js";
 import PopupWithForm from "./PopupWithForm.js";
 import ImagePopup from "./ImagePopup.js";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 function App() {
   let [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -145,25 +145,6 @@ function App() {
         nameOfForm={"popup_confirmation"}
         idOfForm={"popup_confirmation"}
       ></PopupWithForm>
-      <template id="card-template">
-        <li className="elements__item">
-          <article className="card">
-            <img className="card__image" />
-            <div className="card__trash"></div>
-            <div className="card__description">
-              <h2 className="card__name"></h2>
-              <div className="card__likes">
-                <button
-                  className="card__button"
-                  type="button"
-                  aria-label="Лайк"
-                ></button>
-                <p className="card__likes-quantity"></p>
-              </div>
-            </div>
-          </article>
-        </li>
-      </template>
     </div>
   );
 }

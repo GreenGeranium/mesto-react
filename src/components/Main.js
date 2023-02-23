@@ -6,6 +6,15 @@ function Main(props) {
   const [userDescription, setUserDescription] = useState("");
   const [userAvatar, setUserAvatar] = useState("");
 
+  let [cards, setCards] = useState([]);
+
+  //рендер всех карточек
+  useEffect(() => {
+    api.getInitialCards().then((data) => {
+      setCards(data);
+    });
+  }, [cards]);
+
   //установление данных профиля с сервера
   useEffect(() => {
     api.getUserInfo().then((data) => {
@@ -43,7 +52,31 @@ function Main(props) {
         ></button>
       </section>
       <section className="elements" aria-label="Фотокарточки городов">
-        <ul className="elements__list"></ul>
+        <ul className="elements__list">
+          {cards.map((card, i) => {
+            return (
+              <li className="elements__item" key={i}>
+                <article className="card">
+                  <img className="card__image" src={card.link} />
+                  <div className="card__trash"></div>
+                  <div className="card__description">
+                    <h2 className="card__name">{card.name}</h2>
+                    <div className="card__likes">
+                      <button
+                        className="card__button"
+                        type="button"
+                        aria-label="Лайк"
+                      ></button>
+                      <p className="card__likes-quantity">
+                        {card.likes.length}
+                      </p>
+                    </div>
+                  </div>
+                </article>
+              </li>
+            );
+          })}
+        </ul>
       </section>
     </main>
   );
