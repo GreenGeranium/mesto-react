@@ -10,6 +10,13 @@ function App() {
   let [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   let [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
 
+  let [selectedCard, setSelectedCard] = useState(false);
+
+  //обработчик клика по карточке
+  function handleCardClick(data) {
+    setSelectedCard(data);
+  }
+
   //открытие попапа с изменением аватарки
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
@@ -30,6 +37,9 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
+
+    //сброс выбранной карточки
+    setSelectedCard(false);
   }
 
   return (
@@ -39,6 +49,7 @@ function App() {
         onEditProfile={handleEditProfileClick}
         onAddPlace={handleAddPlaceClick}
         onEditAvatar={handleEditAvatarClick}
+        onCardClick={handleCardClick}
       ></Main>
       <Footer></Footer>
       <PopupWithForm
@@ -61,6 +72,7 @@ function App() {
             minLength="2"
             maxLength="40"
             id="name-input"
+            readOnly
           />
           <span className="name-input-error form__input-error"></span>
         </label>
@@ -75,6 +87,7 @@ function App() {
             minLength="2"
             maxLength="200"
             id="profession-input"
+            readOnly
           />
           <span className="profession-input-error form__input-error"></span>
         </label>
@@ -99,6 +112,7 @@ function App() {
             minLength="2"
             maxLength="30"
             id="place-input"
+            readOnly
           />
           <span className="place-input-error form__input-error"></span>
         </label>
@@ -111,6 +125,7 @@ function App() {
             placeholder="Ссылка на картинку"
             required
             id="link-input"
+            readOnly
           />
           <span className="link-input-error form__input-error"></span>
         </label>
@@ -133,11 +148,12 @@ function App() {
             placeholder="Ссылка"
             required
             id="avatar-input"
+            readOnly
           />
           <span className="avatar-input-error form__input-error"></span>
         </label>
       </PopupWithForm>
-      <ImagePopup></ImagePopup>
+      <ImagePopup card={selectedCard} onClose={closeAllPopups}></ImagePopup>
       <PopupWithForm
         title={" Вы уверены?"}
         buttonText={"Да"}

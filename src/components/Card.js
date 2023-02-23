@@ -1,7 +1,15 @@
 function Card(props) {
+  function handleClick() {
+    props.onCardClick(props.card);
+  }
+
   return (
     <article className="card">
-      <img className="card__image" src={props.card.link} />
+      <img
+        className="card__image"
+        src={props.card.link}
+        onClick={handleClick}
+      />
       <div className="card__trash"></div>
       <div className="card__description">
         <h2 className="card__name">{props.card.name}</h2>
