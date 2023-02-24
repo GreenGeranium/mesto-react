@@ -6,15 +6,16 @@ import ImagePopup from "./ImagePopup.js";
 import { useState } from "react";
 
 function App() {
-  let [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
-  let [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
-  let [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
-
-  let [selectedCard, setSelectedCard] = useState(false);
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [isImagePopupOpen, setIsImagePopupOpen] = useState(false)
+  const [selectedCard, setSelectedCard] = useState({});
 
   //обработчик клика по карточке
   function handleCardClick(data) {
     setSelectedCard(data);
+    setIsImagePopupOpen(true)
   }
 
   //открытие попапа с изменением аватарки
@@ -37,9 +38,10 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
+    setIsImagePopupOpen(false)
 
     //сброс выбранной карточки
-    setSelectedCard(false);
+    setSelectedCard({});
   }
 
   return (
@@ -153,7 +155,7 @@ function App() {
           <span className="avatar-input-error form__input-error"></span>
         </label>
       </PopupWithForm>
-      <ImagePopup card={selectedCard} onClose={closeAllPopups}></ImagePopup>
+      <ImagePopup card={selectedCard} onClose={closeAllPopups} isOpen={isImagePopupOpen}></ImagePopup>
       <PopupWithForm
         title={" Вы уверены?"}
         buttonText={"Да"}

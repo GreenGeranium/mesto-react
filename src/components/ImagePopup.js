@@ -8,7 +8,7 @@ function ImagePopup(props) {
     }
   }
   useEffect(() => {
-    if (props.card) {
+    if (props.isOpen) {
       document.addEventListener("keydown", handleEscEscape);
       return () => {
         document.removeEventListener("keydown", handleEscEscape);
@@ -18,7 +18,8 @@ function ImagePopup(props) {
 
   return (
     <div
-      className={`popup popup_image ${props.card ? "popup_opened" : ""}`}
+      className={`popup popup_image ${
+        props.isOpen ? "popup_opened" : ""}`}
       onClick={props.onClose}
     >
       <div

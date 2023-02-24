@@ -7,14 +7,14 @@ function Main(props) {
   const [userDescription, setUserDescription] = useState("");
   const [userAvatar, setUserAvatar] = useState("");
 
-  let [cards, setCards] = useState([]);
+  const [cards, setCards] = useState([]);
 
   //рендер всех карточек
   useEffect(() => {
     api.getInitialCards().then((data) => {
       setCards(data);
     });
-  }, [cards]);
+  }, []);
 
   //установление данных профиля с сервера
   useEffect(() => {
@@ -54,9 +54,9 @@ function Main(props) {
       </section>
       <section className="elements" aria-label="Фотокарточки городов">
         <ul className="elements__list">
-          {cards.map((card, i) => {
+          {cards.map((card) => {
             return (
-              <li className="elements__item" key={i}>
+              <li className="elements__item" key={card._id}>
                 <Card card={card} onCardClick={props.onCardClick}></Card>
               </li>
             );
