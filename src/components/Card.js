@@ -1,5 +1,5 @@
 import React from "react";
-import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 
 function Card(props) {
   const userData = React.useContext(CurrentUserContext);
@@ -13,10 +13,18 @@ function Card(props) {
   }`;
 
   //проверка собственник ли карточки
-  const isOwner = props.card._id === userData._id;
+  const isOwner = props.card.owner._id === userData._id;
 
   function handleClick() {
     props.onCardClick(props.card);
+  }
+
+  function handleLike() {
+    props.onCardLike(props.card);
+  }
+
+  function handleDelete() {
+    props.onCardDelete(props.card);
   }
 
   return (
@@ -26,7 +34,7 @@ function Card(props) {
         src={props.card.link}
         onClick={handleClick}
       />
-      {isOwner && <div className="card__trash"></div>}
+      {isOwner && <div className="card__trash" onClick={handleDelete}></div>}
       <div className="card__description">
         <h2 className="card__name">{props.card.name}</h2>
         <div className="card__likes">
@@ -34,6 +42,7 @@ function Card(props) {
             className={cardLikeButtonClassName}
             type="button"
             aria-label="Лайк"
+            onClick={handleLike}
           ></button>
           <p className="card__likes-quantity">{props.card.likes.length}</p>
         </div>

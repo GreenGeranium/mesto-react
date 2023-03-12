@@ -1,20 +1,9 @@
-import { useEffect, useState } from "react";
-import api from "../utils/api.js";
 import Card from "./Card.js";
 import React from "react";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
 function Main(props) {
   const userData = React.useContext(CurrentUserContext);
-
-  const [cards, setCards] = useState([]);
-
-  //рендер всех карточек
-  useEffect(() => {
-    api.getInitialCards().then((data) => {
-      setCards(data);
-    });
-  }, []);
 
   return (
     <main className="content">
@@ -45,10 +34,15 @@ function Main(props) {
       </section>
       <section className="elements" aria-label="Фотокарточки городов">
         <ul className="elements__list">
-          {cards.map((card) => {
+          {props.cards.map((card) => {
             return (
               <li className="elements__item" key={card._id}>
-                <Card card={card} onCardClick={props.onCardClick}></Card>
+                <Card
+                  card={card}
+                  onCardClick={props.onCardClick}
+                  onCardLike={props.onCardLike}
+                  onCardDelete={props.onCardDelete}
+                ></Card>
               </li>
             );
           })}

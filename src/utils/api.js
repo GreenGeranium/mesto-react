@@ -23,18 +23,10 @@ class Api {
     }).then(this._getResponseData);
   }
 
-  //запрос на добавление карточки
-  addLike(cardId) {
+  //запрос на изменение лайка
+  handleCardLike(cardId, isLiked) {
     return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
-      method: "PUT",
-      headers: this._headers,
-    }).then(this._getResponseData);
-  }
-
-  //запрос на удаление лайка
-  removeLike(cardId) {
-    return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
-      method: "DELETE",
+      method: `${isLiked ? "DELETE" : "PUT"}`,
       headers: this._headers,
     }).then(this._getResponseData);
   }

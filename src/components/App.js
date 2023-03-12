@@ -3,7 +3,7 @@ import Main from "./Main.js";
 import Footer from "./Footer.js";
 import PopupWithForm from "./PopupWithForm.js";
 import ImagePopup from "./ImagePopup.js";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import api from "../utils/api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
@@ -14,14 +14,69 @@ function App() {
   const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
 
+  const [cards, setCards] = useState([]);
+
   const [currentUser, setCurrentUser] = useState({});
 
   //получение действующего профиля
   useEffect(() => {
-    api.getUserInfo().then((data) => {
-      setCurrentUser(data);
-    });
+    api
+      .getUserInfo()
+      .then((data) => {
+        setCurrentUser(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   });
+
+  //удаление карточки
+  function handleCardDelete(card) {
+    api
+      .handleDeleteCard(card._id)
+      .then((data) => {
+        setCards((cards) =>
+          cards.filter((c) => {
+            return c._id !== card._id;
+          })
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  //обработчик лайка карточки
+  function handleCardLike(card) {
+    const isLiked = card.likes.some(
+      (cardLiker) => cardLiker._id === currentUser._id
+    );
+
+    api
+      .handleCardLike(card._id, isLiked)
+      .then((data) => {
+        setCards((cards) =>
+          cards.map((c) => {
+            return c._id === card._id ? data : c;
+          })
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  //рендер всех карточек
+  useEffect(() => {
+    api
+      .getInitialCards()
+      .then((data) => {
+        setCards(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   //обработчик клика по карточке
   function handleCardClick(data) {
@@ -64,6 +119,9 @@ function App() {
           onAddPlace={handleAddPlaceClick}
           onEditAvatar={handleEditAvatarClick}
           onCardClick={handleCardClick}
+          cards={cards}
+          onCardLike={handleCardLike}
+          onCardDelete={handleCardDelete}
         ></Main>
         <Footer></Footer>
         <PopupWithForm
