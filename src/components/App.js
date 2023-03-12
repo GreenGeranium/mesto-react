@@ -3,19 +3,22 @@ import Main from "./Main.js";
 import Footer from "./Footer.js";
 import PopupWithForm from "./PopupWithForm.js";
 import ImagePopup from "./ImagePopup.js";
+import EditProfilePopup from "./EditProfilePopup.js";
 import React, { useState, useEffect } from "react";
 import api from "../utils/api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
 function App() {
+  //установление закрытых изначально папапов
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
+  //выбранная карточка
   const [selectedCard, setSelectedCard] = useState({});
-
+  //массив карточек с сервера
   const [cards, setCards] = useState([]);
-
+  //действующий пользователь
   const [currentUser, setCurrentUser] = useState({});
 
   //получение действующего профиля
@@ -28,7 +31,7 @@ function App() {
       .catch((err) => {
         console.log(err);
       });
-  });
+  }, []);
 
   //удаление карточки
   function handleCardDelete(card) {
@@ -78,6 +81,19 @@ function App() {
       });
   }, []);
 
+  //отправка на сервер новых данных пользователя из формы
+  function handleUpdateUser(data) {
+    api
+      .changeUserInfo(data.name, data.about)
+      .then((newData) => {
+        setCurrentUser(newData);
+        closeAllPopups();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   //обработчик клика по карточке
   function handleCardClick(data) {
     setSelectedCard(data);
@@ -124,46 +140,11 @@ function App() {
           onCardDelete={handleCardDelete}
         ></Main>
         <Footer></Footer>
-        <PopupWithForm
-          title={"Редактировать профиль"}
-          name={"edit"}
-          nameOfForm={"profile-edit"}
-          idOfForm={"profile-edit"}
-          buttonText={"Сохранить"}
+        <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
-        >
-          <label className="form__field">
-            <input
-              type="text"
-              value=""
-              className="form__input form__input_type_name"
-              name="profile-name"
-              placeholder="Имя"
-              required
-              minLength="2"
-              maxLength="40"
-              id="name-input"
-              readOnly
-            />
-            <span className="name-input-error form__input-error"></span>
-          </label>
-          <label className="form__field">
-            <input
-              type="text"
-              value=""
-              className="form__input form__input_type_profession"
-              name="profile-profession"
-              placeholder="Описание"
-              required
-              minLength="2"
-              maxLength="200"
-              id="profession-input"
-              readOnly
-            />
-            <span className="profession-input-error form__input-error"></span>
-          </label>
-        </PopupWithForm>
+          onUpdateUser={handleUpdateUser}
+        ></EditProfilePopup>
         <PopupWithForm
           title={"Новое место"}
           name={"add"}
