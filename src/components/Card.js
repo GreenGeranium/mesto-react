@@ -23,8 +23,8 @@ function Card(props) {
     props.onCardLike(props.card);
   }
 
-  function handleDelete() {
-    props.onCardDelete(props.card);
+  function handleTrashClick() {
+    props.onTrashClick(props.card);
   }
 
   return (
@@ -34,7 +34,9 @@ function Card(props) {
         src={props.card.link}
         onClick={handleClick}
       />
-      {isOwner && <div className="card__trash" onClick={handleDelete}></div>}
+      {isOwner && (
+        <div className="card__trash" onClick={handleTrashClick}></div>
+      )}
       <div className="card__description">
         <h2 className="card__name">{props.card.name}</h2>
         <div className="card__likes">

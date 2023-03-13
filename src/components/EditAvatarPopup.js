@@ -1,6 +1,5 @@
 import PopupWithForm from "./PopupWithForm";
 import React from "react";
-import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
 function EditAvatarPopup(props) {
   const inputRef = React.useRef("");
@@ -15,6 +14,8 @@ function EditAvatarPopup(props) {
     e.preventDefault();
 
     props.onUpdateAvatar(link);
+    props.onClose();
+    setLink("");
   }
 
   return (

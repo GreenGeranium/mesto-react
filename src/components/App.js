@@ -1,27 +1,34 @@
-import Header from "./Header.js";
-import Main from "./Main.js";
-import Footer from "./Footer.js";
-import PopupWithForm from "./PopupWithForm.js";
-import ImagePopup from "./ImagePopup.js";
-import EditProfilePopup from "./EditProfilePopup.js";
 import React, { useState, useEffect } from "react";
 import api from "../utils/api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import Header from "./Header.js";
+import Main from "./Main.js";
+import Footer from "./Footer.js";
+import ImagePopup from "./ImagePopup.js";
+import EditProfilePopup from "./EditProfilePopup.js";
 import EditAvatarPopup from "./EditAvatarPopup";
-import editProfilePopup from "./EditProfilePopup.js";
+import AddPlacePopup from "./AddPlacePopup";
+import ConfirmationPopup from "./ConfirmationPopup";
 
 function App() {
-  //установление закрытых изначально папапов
+  //установление изначально закрытых папапов
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
+  const [isConfirmationPopupOpen, setIsConfirmationPopupOpen] = useState(false);
+
   //выбранная карточка
   const [selectedCard, setSelectedCard] = useState({});
+
   //массив карточек с сервера
   const [cards, setCards] = useState([]);
+
   //действующий пользователь
   const [currentUser, setCurrentUser] = useState({});
+
+  //данные карточки, которую нужно удалить
+  const [deletingCard, setDeletingCard] = useState({});
 
   //получение действующего профиля
   useEffect(() => {
@@ -35,20 +42,19 @@ function App() {
       });
   }, []);
 
-  //удаление карточки
-  function handleCardDelete(card) {
-    api
-      .handleDeleteCard(card._id)
-      .then((data) => {
-        setCards((cards) =>
-          cards.filter((c) => {
-            return c._id !== card._id;
-          })
-        );
+  //открытие попапа подтверждения удаления и передача данных карточки для удаления
+  function handleConfirmation(card) {
+    setIsConfirmationPopupOpen(true);
+    setDeletingCard(card);
+  }
+
+  //рендер карточек после подтверждения удаления
+  function renderCardsAfterDeleting() {
+    setCards((cards) =>
+      cards.filter((c) => {
+        return c._id !== deletingCard._id;
       })
-      .catch((err) => {
-        console.log(err);
-      });
+    );
   }
 
   //обработчик лайка карточки
@@ -109,6 +115,13 @@ function App() {
       });
   }
 
+  //отправка на сервер новой карточки из формы
+  function handleAddPlaceSubmit(data) {
+    api.addNewCard(data.place, data.link).then((newData) => {
+      setCards([newData, ...cards]);
+    });
+  }
+
   //обработчик клика по карточке
   function handleCardClick(data) {
     setSelectedCard(data);
@@ -136,6 +149,7 @@ function App() {
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsImagePopupOpen(false);
+    setIsConfirmationPopupOpen(false);
 
     //сброс выбранной карточки
     setSelectedCard({});
@@ -152,7 +166,7 @@ function App() {
           onCardClick={handleCardClick}
           cards={cards}
           onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete}
+          onTrashClick={handleConfirmation}
         ></Main>
         <Footer></Footer>
         <EditProfilePopup
@@ -160,44 +174,11 @@ function App() {
           onClose={closeAllPopups}
           onUpdateUser={handleUpdateUser}
         ></EditProfilePopup>
-        <PopupWithForm
-          title={"Новое место"}
-          name={"add"}
-          nameOfForm={"card-add"}
-          idOfForm={"profile-add"}
-          buttonText={"Сохранить"}
+        <AddPlacePopup
           isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}
-        >
-          <label className="form__field">
-            <input
-              type="text"
-              value=""
-              className="form__input form__input_type_place"
-              name="card-name"
-              placeholder="Название"
-              required
-              minLength="2"
-              maxLength="30"
-              id="place-input"
-              readOnly
-            />
-            <span className="place-input-error form__input-error"></span>
-          </label>
-          <label className="form__field">
-            <input
-              type="url"
-              value=""
-              className="form__input form__input_type_link"
-              name="card-link"
-              placeholder="Ссылка на картинку"
-              required
-              id="link-input"
-              readOnly
-            />
-            <span className="link-input-error form__input-error"></span>
-          </label>
-        </PopupWithForm>
+          onAddPlace={handleAddPlaceSubmit}
+        ></AddPlacePopup>
         <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}
@@ -208,13 +189,13 @@ function App() {
           onClose={closeAllPopups}
           isOpen={isImagePopupOpen}
         ></ImagePopup>
-        <PopupWithForm
-          title={" Вы уверены?"}
-          buttonText={"Да"}
-          name={"confirmation"}
-          nameOfForm={"popup_confirmation"}
-          idOfForm={"popup_confirmation"}
-        ></PopupWithForm>
+        <ConfirmationPopup
+          isOpen={isConfirmationPopupOpen}
+          onClose={closeAllPopups}
+          deletingCard={deletingCard}
+          cards={cards}
+          renderCards={renderCardsAfterDeleting}
+        ></ConfirmationPopup>
       </div>
     </CurrentUserContext.Provider>
   );
