@@ -7,6 +7,8 @@ import EditProfilePopup from "./EditProfilePopup.js";
 import React, { useState, useEffect } from "react";
 import api from "../utils/api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import EditAvatarPopup from "./EditAvatarPopup";
+import editProfilePopup from "./EditProfilePopup.js";
 
 function App() {
   //установление закрытых изначально папапов
@@ -87,6 +89,19 @@ function App() {
       .changeUserInfo(data.name, data.about)
       .then((newData) => {
         setCurrentUser(newData);
+        closeAllPopups();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  //отправка на сервер новой аватарки из формы
+  function handleUpdateAvatar(link) {
+    api
+      .changeProfileAvatar(link)
+      .then((data) => {
+        setCurrentUser(data);
         closeAllPopups();
       })
       .catch((err) => {
@@ -183,29 +198,11 @@ function App() {
             <span className="link-input-error form__input-error"></span>
           </label>
         </PopupWithForm>
-        <PopupWithForm
-          title={"Обновить аватар"}
-          name={"avatar"}
-          nameOfForm={"avatar-change"}
-          idOfForm={"popup_avatar"}
-          buttonText={"Сохранить"}
+        <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}
-        >
-          <label className="form__field">
-            <input
-              type="url"
-              value=""
-              className="form__input form__input_type_avatar"
-              name="avatar-link"
-              placeholder="Ссылка"
-              required
-              id="avatar-input"
-              readOnly
-            />
-            <span className="avatar-input-error form__input-error"></span>
-          </label>
-        </PopupWithForm>
+          onUpdateAvatar={handleUpdateAvatar}
+        ></EditAvatarPopup>
         <ImagePopup
           card={selectedCard}
           onClose={closeAllPopups}
