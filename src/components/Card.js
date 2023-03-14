@@ -33,6 +33,7 @@ function Card(props) {
         className="card__image"
         src={props.card.link}
         onClick={handleClick}
+        alt={props.card.name}
       />
       {isOwner && (
         <div className="card__trash" onClick={handleTrashClick}></div>

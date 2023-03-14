@@ -8,10 +8,13 @@ function AddPlacePopup(props) {
   function handleSubmit(e) {
     e.preventDefault();
     props.onAddPlace({ place, link });
-    props.onClose();
+  }
+
+  //очистка полей по открытии формы
+  React.useEffect(() => {
     setPlace("");
     setLink("");
-  }
+  }, [props.isOpen]);
 
   return (
     <PopupWithForm

@@ -48,6 +48,19 @@ function App() {
     setDeletingCard(card);
   }
 
+  //обработчик удаления карточки
+  function handleDeleteCard() {
+    api
+      .handleDeleteCard(deletingCard._id)
+      .then((data) => {
+        renderCardsAfterDeleting();
+        closeAllPopups();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   //рендер карточек после подтверждения удаления
   function renderCardsAfterDeleting() {
     setCards((cards) =>
@@ -117,9 +130,15 @@ function App() {
 
   //отправка на сервер новой карточки из формы
   function handleAddPlaceSubmit(data) {
-    api.addNewCard(data.place, data.link).then((newData) => {
-      setCards([newData, ...cards]);
-    });
+    api
+      .addNewCard(data.place, data.link)
+      .then((newData) => {
+        setCards([newData, ...cards]);
+        closeAllPopups();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   //обработчик клика по карточке
@@ -192,9 +211,7 @@ function App() {
         <ConfirmationPopup
           isOpen={isConfirmationPopupOpen}
           onClose={closeAllPopups}
-          deletingCard={deletingCard}
-          cards={cards}
-          renderCards={renderCardsAfterDeleting}
+          onDeleteCard={handleDeleteCard}
         ></ConfirmationPopup>
       </div>
     </CurrentUserContext.Provider>

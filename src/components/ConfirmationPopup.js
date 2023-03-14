@@ -1,24 +1,15 @@
-import api from "../utils/api";
 import PopupWithForm from "./PopupWithForm";
 import React from "react";
 
 function ConfirmationPopup(props) {
   function handleSubmit(e) {
     e.preventDefault();
-    api
-      .handleDeleteCard(props.deletingCard._id)
-      .then((data) => {
-        props.renderCards();
-        props.onClose();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    props.onDeleteCard();
   }
 
   return (
     <PopupWithForm
-      title={" Вы уверены?"}
+      title={"Вы уверены?"}
       buttonText={"Да"}
       name={"confirmation"}
       nameOfForm={"popup_confirmation"}
